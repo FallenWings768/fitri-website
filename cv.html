@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>My Curriculum Vitae</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .viewer { max-width: 1000px; margin: 32px auto; text-align:center; padding: 0 16px; }
+    .cv-frame { position: relative; }
+    .cv-frame img { width:100%; height:auto; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.15); background:#fff; }
+    .controls { display:flex; justify-content:space-between; align-items:center; margin:16px 0; gap:8px; }
+    .btn { padding:10px 16px; border:0; border-radius:8px; background:#000; color:#fff; cursor:pointer; }
+    .btn:disabled { background:#888; cursor:not-allowed; }
+    .counter { font-weight:600; }
+    .back { display:inline-block; margin-bottom:8px; }
+  </style>
+</head>
+<body>
+  <div class="viewer">
+    <a class="back" href="index.html">⬅ Back to Home</a>
+    <h1>Curriculum Vitae</h1>
+
+    <div class="cv-frame">
+      <img id="cvImg" src="" alt="CV page">
+    </div>
+
+    <div class="controls">
+      <button id="prev" class="btn">⟵ Prev</button>
+      <div class="counter"><span id="at">1</span> / <span id="total">12</span></div>
+      <button id="next" class="btn">Next ⟶</button>
+    </div>
+  </div>
+
+  <script>
+    // List your exact filenames (order matters)
+    const pages = [
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0001.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0002.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0003.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0004.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0005.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0006.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0007.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0008.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0009.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0010.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0011.jpg",
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0012.jpg",
+    ];
+
+    const img   = document.getElementById('cvImg');
+    const prev  = document.getElementById('prev');
+    const next  = document.getElementById('next');
+    const at    = document.getElementById('at');
+    const total = document.getElementById('total');
+
+    let i = 0;
+    total.textContent = pages.length;
+
+    function render() {
+      img.src = pages[i];
+      at.textContent = i + 1;
+      prev.disabled = i === 0;
+      next.disabled = i === pages.length - 1;
+    }
+    render();
+
+    prev.addEventListener('click', () => { if (i>0) { i--; render(); }});
+    next.addEventListener('click', () => { if (i<pages.length-1) { i++; render(); }});
+
+    // Arrow keys
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prev.click();
+      if (e.key === 'ArrowRight') next.click();
+    });
+  </script>
+</body>
+</html>
