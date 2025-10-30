@@ -1,45 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Fitri First Website</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Danial Fitri</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="main-content">
-    <h1>Fitri First Website</h1>
-    <h2>Bukan besher2</h2>
+  <header class="nf-header">
+    <div class="nf-inner">
+      <a href="index.html" class="nf-logo">DANIAL FITRI</a>
+      <nav class="nf-nav">
+        <a href="#" class="active">Home</a>
+        <a href="cv.html">Curriculum Vitae</a>
+        <a href="#movies">Movies</a>
+        <a href="#games">Games</a>
+        <a href="#new">New & Popular</a>
+        <a href="cv.html">My List</a>
+        <a href="#lang">Browse by Languages</a>
+      </nav>
+    </div>
+  </header>
 
-    <button id="colorButton">Click Me!</button>
-    <br><br>
+  <!-- HERO with background video -->
+  <section class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+  <source src="yourvideo.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
 
-    <!-- 🎵 Music Button -->
-    <button id="musicButton">Play Music</button>
+    <div class="hero-overlay">
+      <h1>DANIAL FITRI - Planning Engineer</h1>
+      <p>Let me architect your next masterpiece!</p>
+      <button class="hero-btn">Play</button>
+    </div>
+  </section>
 
-  <!-- 📜 Left Column -->
-  <div class="left-column">
-    <p><a class="side-link" href="mailto:ahmaddanialfitri1@gmail.com">1. Email Me!</a></p>
-    <p>
-  <a class="side-link"
-     href="https://wa.me/60195991495"
-     target="_blank">
-     2. Whatsapp Me!!
-  </a>
-</p>
-    <p>
-  <a class="side-link" href="cv.html">3. My Curriculum Vitae</a>
-</p>
+  <!-- Background music -->
+<audio id="bgMusic" autoplay loop preload="auto">
+  <source src="mysong.mp3" type="audio/mpeg">
+</audio>
 
+
+<script>
+(function () {
+  const music = document.getElementById("bgMusic");
+  if (!music) return;
+
+  // Try muted autoplay first
+  music.muted = true;
+  music.volume = 1.0;
+
+  function enableUIPlaying() {
+    music.muted = false;
+    music.play().catch(() => {}); // in case user immediately navigates
+    removeUnlockers();
+  }
+
+  // Fallback button (visible only if needed)
+  function showEnableButton() {
+    if (document.getElementById("enable-audio-btn")) return;
+    const btn = document.createElement("button");
+    btn.id = "enable-audio-btn";
+    btn.textContent = "🔊 Enable Sound";
+    btn.style = "position:fixed;bottom:24px;right:24px;padding:10px 16px;background:#00bfff;color:#fff;border:0;border-radius:8px;cursor:pointer;font-weight:700;z-index:9999;";
+    btn.addEventListener("click", enableUIPlaying);
+    document.body.appendChild(btn);
+  }
+
+  // Global “unlockers” (any interaction starts audio)
+  function removeUnlockers() {
+    ["pointerdown","keydown","touchstart"].forEach(ev =>
+      window.removeEventListener(ev, enableUIPlaying, { passive:true })
+    );
+    const b = document.getElementById("enable-audio-btn");
+    if (b) b.remove();
+  }
+
+  // Try to play muted, then unmute after a short tick
+  music.play().then(() => {
+    setTimeout(() => {
+      // On some browsers, unmuting right away still passes
+      music.muted = false;
+    }, 600);
+  }).catch(() => {
+    // Autoplay blocked: wait for any user interaction
+    ["pointerdown","keydown","touchstart"].forEach(ev =>
+      window.addEventListener(ev, enableUIPlaying, { passive:true, once:true })
+    );
+    showEnableButton();
+  });
+
+  // Also wire your hero “Play” button as an explicit starter (optional)
+  const heroBtn = document.querySelector(".hero-btn");
+  if (heroBtn) {
+    heroBtn.addEventListener("click", enableUIPlaying);
+  }
+})();
+</script>
+
+<section class="recommendations">
+  <h2>My Previous Projects: </h2>
+  <div class="rec-row">
+    <div class="rec-item"><img src="lhdhhd.jpg" alt="LHD/HHD"><p>Underground PIPING for LHD/HHD AT ARDS 1, ARDS 2 & CDU</p></div>
+    <div class="rec-item"><img src="hdtar.jpg" alt="Sakamoto Days"><p>HDT AR Export Utilizing HDT AR Pumps (5150-P-016A/B) Jumper Line Project</p></div>
+    <div class="rec-item"><img src="uzv.jpg" alt="Black Clover"><p>UZV 2050 Pressure Equalizing Line</p></div>
+    <div class="rec-item"><img src="cduredundantskid.jpg" alt="One Punch Man"><p>Naphta Stabilizer Feed Second Redundant Temporary Modular Filter</p></div>
+    <div class="rec-item"><img src="fostankinlet.jpg" alt="Solo Leveling"><p>FOS Tank Inlet Modification</p></div>
+    <div class="rec-item"><img src="scujumperline.jpg" alt="Hunter x Hunter"><p>SCU: 2100-E-147C & E Hot Tapping & Jumper Line</p></div>
   </div>
-
-    <!-- 🖼️ Image -->
-    <img src="myphoto.png" alt="My Photo" width="1000">
-
-    <!-- 🎶 Audio File -->
-    <audio id="bgMusic" src="Drake - Kiki Do You Love Me (Music Video).mp3"></audio>
-  </div>
-
-  <script src="script.js"></script>
+</section>
 
 </body>
 </html>
+

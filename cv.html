@@ -1,38 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>My Curriculum Vitae</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .viewer { max-width: 1000px; margin: 32px auto; text-align:center; padding: 0 16px; }
-    .cv-frame { position: relative; }
-    .cv-frame img { width:100%; height:auto; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.15); background:#fff; }
-    .controls { display:flex; justify-content:space-between; align-items:center; margin:16px 0; gap:8px; }
-    .btn { padding:10px 16px; border:0; border-radius:8px; background:#000; color:#fff; cursor:pointer; }
-    .btn:disabled { background:#888; cursor:not-allowed; }
-    .counter { font-weight:600; }
-    .back { display:inline-block; margin-bottom:8px; }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Danial Fitri – CV</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="viewer">
-    <a class="back" href="index.html">⬅ Back to Home</a>
-    <h1>Curriculum Vitae</h1>
 
-    <div class="cv-frame">
-      <img id="cvImg" src="" alt="CV page">
+  <header class="nf-header">
+    <div class="nf-inner">
+      <a href="index.html" class="nf-logo">DANIAL FITRI</a>
+      <nav class="nf-nav">
+        <a href="index.html">Home</a>
+        <a href="cv.html" class="active">Curriculum Vitae</a>
+        <a href="#movies">Movies</a>
+        <a href="#games">Games</a>
+        <a href="#new">New & Popular</a>
+        <a href="#list">My List</a>
+        <a href="#lang">Browse by Languages</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="controls">
-      <button id="prev" class="btn">⟵ Prev</button>
-      <div class="counter"><span id="at">1</span> / <span id="total">12</span></div>
-      <button id="next" class="btn">Next ⟶</button>
+  <main style="display:flex;justify-content:center;align-items:center;flex-direction:column;gap:16px;padding:80px 0;">
+    <img id="cvImg" alt="CV Page" style="max-width:90%;height:auto;border:2px solid #444;border-radius:8px;">
+    <div class="cv-controls" style="display:flex;gap:12px;align-items:center;">
+      <button id="prev">⬅ Previous</button>
+      <span>Page <span id="at">1</span> of <span id="total">—</span></span>
+      <button id="next">Next ➡</button>
     </div>
-  </div>
+  </main>
 
   <script>
-    // List your exact filenames (order matters)
+  document.addEventListener('DOMContentLoaded', () => {
+    // If your images are in a subfolder, set base = "images/";
+    const base = ""; // same folder as cv.html
+
     const pages = [
       "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0001.jpg",
       "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0002.jpg",
@@ -45,8 +49,8 @@
       "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0009.jpg",
       "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0010.jpg",
       "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0011.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0012.jpg",
-    ];
+      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0012.jpg"
+    ].map(name => base + name);
 
     const img   = document.getElementById('cvImg');
     const prev  = document.getElementById('prev');
@@ -60,19 +64,20 @@
     function render() {
       img.src = pages[i];
       at.textContent = i + 1;
-      prev.disabled = i === 0;
-      next.disabled = i === pages.length - 1;
+      prev.disabled = (i === 0);
+      next.disabled = (i === pages.length - 1);
     }
-    render();
 
-    prev.addEventListener('click', () => { if (i>0) { i--; render(); }});
-    next.addEventListener('click', () => { if (i<pages.length-1) { i++; render(); }});
+    prev.addEventListener('click', () => { if (i > 0) { i--; render(); }});
+    next.addEventListener('click', () => { if (i < pages.length - 1) { i++; render(); }});
 
-    // Arrow keys
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') prev.click();
+      if (e.key === 'ArrowLeft')  prev.click();
       if (e.key === 'ArrowRight') next.click();
     });
+
+    render();
+  });
   </script>
 </body>
 </html>
