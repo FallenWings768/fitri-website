@@ -1,61 +1,271 @@
-body {
-  background-color: #f4f4f4;
-  font-family: Arial, sans-serif;
-  color: #333;
-  text-align: center;
-  padding-top: 50px;
-
-  /* 🔹 Add left & right border lines */
-  border-left: 200px solid #171717;
-  border-right: 200px solid #171717;
-
-  /* Optional: keep the borders visible at full height */
-  min-height: 100vh;
+/* --- Netflix-like top header --- */
+.nf-header{
+  position: relative;           /* or fixed for always-on-top */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 28px;
+  background: linear-gradient(to bottom, rgba(0,0,0,.75), rgba(0,0,0,0));
+  /* use solid if your page background is light:  background:#141414; */
 }
 
-h1 {
-  color: #171717;
+.nf-logo{
+  color:#F6F25C;              /* bright cyan (turquoise) */
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-decoration:none;
+  font-size:22px;
+}
+.nf-logo-img{ height: 24px; display:block; }
+
+.nf-nav{
+  display:flex;
+  gap:22px;
 }
 
-h2 {
-  color: #171717;
-  font-size: 18px
+.nf-nav a{
+  color:#fff;
+  font-family: "Calibri", Gadget, sans-serif;
+  text-decoration:none;
+  font-weight:600;
+  opacity:.85;
 }
 
-p {
-  text-align: left;
-  margin-left: 200px; /* pushes it away from the edge if needed */
-  font-size: 18px;
+.nf-nav a:hover{ opacity:1; }
+
+.nf-nav a.active{
+  opacity:1;
+  font-weight:800;            /* bolder like the screenshot */
 }
 
-button {
-  background-color: black;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
+/* If your main content sits flush to the top, add top padding so it
+   doesn't hide under the header when header is fixed/ sticky */
+main, .main-content, body > section:first-of-type{
+  scroll-margin-top: 80px;    /* anchors scroll nicely */
+  /* padding-top: 10px;  add if needed for spacing */
 }
 
-button:hover {
-  background-color: gold;
+/* reset */
+* { box-sizing: border-box; }
+html,body { margin: 0; }
+body { background: #0f0f0f; font-family: Arial, sans-serif; }
+
+/* header */
+.nf-header{
+  position: relative; z-index: 100;
+  background: linear-gradient(to bottom, rgba(0,0,0,.75), rgba(0,0,0,0));
+}
+.nf-inner{
+  max-width: 1200px; margin: 0 auto;
+  padding: 12px 24px;
+  display: flex; align-items: center; gap: 28px;
 }
 
-img {
-  display: block;
-  margin: 20px auto;
-  border-radius: 0px;
-  box-shadow: 0 0 0px rgba(0,0,0,0.3);
-body {
-  background-color: white;
-  font-family: Arial, sans-serif;
-  color: #333;
-  text-align: center;
-  padding-top: 50px;
-  min-height: 100vh;
+.nf-logo{
+  color: #F6F25C;                /* turquoise */
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-weight: 800; letter-spacing: .08em;
+  text-decoration: none;
+  font-size: 24px; line-height: 1; /* keep vertical center */
+}
+
+.nf-nav{ display: flex; gap: 22px; }
+.nf-nav a{
+  display: inline-flex; align-items: center; /* vertical centering */
+  color: #fff; text-decoration: none;
+  font-weight: 600; opacity: .85;
+  font-size: 16px; line-height: 1;          /* remove baseline drift */
+  padding: 6px 4px;                          /* even click area */
+}
+.nf-nav a:hover{ opacity: 1; }
+.nf-nav a.active{ opacity: 1; font-weight: 800; }
+
+/* If content anchors jump under header */
+main, .main-content, body > section:first-of-type { scroll-margin-top: 80px; }
+
+.nf-logo {
+  color: #F6F25C;
+  text-shadow: 0 0 10px #F6F25C, 0 0 20px #00cccc;
+}
+
+/* --- HERO VIDEO SECTION --- */
+.hero {
   position: relative;
-  margin: 0;
+  height: 100vh;                /* full screen height */
+  overflow: hidden;
+  background: black;
 }
+
+.hero-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;            /* fills area without stretching */
+  z-index: 1;
+}
+
+/* dark overlay to make text readable */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+  z-index: 2;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 50%;
+  left: 60px;
+  transform: translateY(-50%);
+  color: white;
+  z-index: 3;
+}
+
+.hero-overlay h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.hero-overlay p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.hero-btn {
+  background: #F6F25C;
+  color: black;
+  border: none;
+  padding: 10px 30px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.hero-btn:hover {
+  background: #f40612;
+}
+
+.hero-overlay {
+  animation: fadeIn 2s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-40%); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
+.recommendations {
+  background: #0f0f0f;
+  color: #fff;
+  padding: 40px 60px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.recommendations h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.recommendations .highlight {
+  color: #ccc;
+  font-weight: 400;
+}
+
+.rec-row {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.rec-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.rec-row::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.rec-item {
+  flex: 0 0 auto;
+  width: 200px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.rec-item:hover {
+  transform: scale(1.1);
+}
+
+.rec-item img {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+.rec-item p {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.projects {
+  margin-top: -120px;  /* move section up */
+  position: relative;
+  z-index: 5;         /* keeps it above video */
+}
+
+.cv-controls button {
+  background-color: #F6F25C;         /* bright yellow, matches your logo */
+  color: #000;
+  border: none;
+  border-radius: 30px;              /* <-- round shape */
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(246, 242, 92, 0.5);
+}
+
+.cv-controls button:hover {
+  background-color: #f40612;        /* red on hover */
+  color: #fff;
+  box-shadow: 0 0 20px rgba(244, 6, 18, 0.6);
+}
+
+.cv-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.cv-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.cv-controls span {
+  color: #fff;
+  font-weight: 500;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+
+
+
 
 
