@@ -87,3 +87,6 @@ window.addEventListener("DOMContentLoaded", () => {
     render();
   }
 });
+
+img.addEventListener('transitionend', () => { animating = false; }, { once:true });
+

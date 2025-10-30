@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danial Fitri – CV</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -33,51 +33,90 @@
   </main>
 
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // If your images are in a subfolder, set base = "images/";
-    const base = ""; // same folder as cv.html
+document.addEventListener('DOMContentLoaded', () => {
+  // If your images are in a subfolder, change base = "images/";
+  const base = "";
 
-    const pages = [
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0001.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0002.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0003.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0004.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0005.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0006.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0007.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0008.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0009.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0010.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0011.jpg",
-      "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0012.jpg"
-    ].map(name => base + name);
+  const pages = [
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0001.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0002.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0003.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0004.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0005.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0006.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0007.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0008.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0009.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0010.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0011.jpg",
+    "2025-Oct - CV AHMAD DANIAL FITRI BIN OSMAN_page-0012.jpg"
+  ].map(n => base + n);
 
-    const img   = document.getElementById('cvImg');
-    const prev  = document.getElementById('prev');
-    const next  = document.getElementById('next');
-    const at    = document.getElementById('at');
-    const total = document.getElementById('total');
+  const img   = document.getElementById('cvImg');
+  const prev  = document.getElementById('prev');
+  const next  = document.getElementById('next');
+  const at    = document.getElementById('at');
+  const total = document.getElementById('total');
 
-    let i = 0;
-    total.textContent = pages.length;
+  let i = 0;
+  let animating = false; // prevent double clicks during transition
+  total.textContent = pages.length;
 
-    function render() {
-      img.src = pages[i];
-      at.textContent = i + 1;
-      prev.disabled = (i === 0);
-      next.disabled = (i === pages.length - 1);
-    }
-
-    prev.addEventListener('click', () => { if (i > 0) { i--; render(); }});
-    next.addEventListener('click', () => { if (i < pages.length - 1) { i++; render(); }});
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft')  prev.click();
-      if (e.key === 'ArrowRight') next.click();
+  function preload(src){
+    return new Promise(res => {
+      const im = new Image();
+      im.onload  = () => res(im);
+      im.onerror = () => res(im);     // still resolve; avoid deadlocks
+      im.src = src;
     });
+  }
 
-    render();
+  async function swapTo(newIndex){
+    if (animating || newIndex === i || newIndex < 0 || newIndex >= pages.length) return;
+    animating = true;
+
+    // Blur + fade the current image
+    img.classList.add('is-blurring');
+
+    // Preload the next image while the blur animates
+    const src = pages[newIndex];
+    await preload(src);
+
+    // After a small delay, swap to the new src and unblur
+    // (allowing the browser to apply the class first)
+    setTimeout(() => {
+      img.src = src;
+      at.textContent = newIndex + 1;
+      prev.disabled = newIndex === 0;
+      next.disabled = newIndex === pages.length - 1;
+
+      // Allow one frame so new src binds, then remove blur to animate in
+      requestAnimationFrame(() => {
+        img.classList.remove('is-blurring');
+        // end lock after the transition completes
+        img.addEventListener('transitionend', () => { animating = false; }, { once:true });
+      });
+      i = newIndex;
+    }, 40);
+  }
+
+  // initial render
+  (async () => {
+    await preload(pages[i]);
+    img.src = pages[i];
+    at.textContent = i + 1;
+    prev.disabled = i === 0;
+    next.disabled = i === pages.length - 1;
+  })();
+
+  prev.addEventListener('click', () => swapTo(i - 1));
+  next.addEventListener('click', () => swapTo(i + 1));
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  swapTo(i - 1);
+    if (e.key === 'ArrowRight') swapTo(i + 1);
   });
-  </script>
+});
+</script>
 </body>
 </html>
